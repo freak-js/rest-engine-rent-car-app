@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Welcome</title>
+    {%  include 'cars_rent_app/links.html' %}
+    {% load crispy_forms_tags %}
+</head>
+<body>
+
+    {%  include 'cars_rent_app/menu.html' %}
+
+    <div class="my-container">
+
+        <div class="user-data">
+
+            {% if superuser %}
+
+                <span>Список пользователей:</span> <br>
+
+                {% for user in user_list %}
+
+                    <span>{{ user.first_name }}</span><br>
+
+                    <span>{{ user.email }}</span><br>
+                    
+                    <a href="/user_info/{{user.pk}}">Подробнее</a><br><br>
+
+                {% endfor %}
+
+            {% else %}
+
+                <i class="fa fa-user-circle-o" aria-hidden="true" style="font-size: 40px;"></i><br>
+
+                <span style="font-size: 20px;">{{ user.first_name }}</span><br>
+
+                <span style="font-size: 14px;">{{ user.email }}</span>
+
+            {% endif %}
+
+        </div>
+
+        <div class="cars">
+
+            {% if user_cars %}
+
+                <form action="/return_car/" method="POST">
+
+                    {% csrf_token %}
+
+                    <h2 style="text-align: left;">Ваши автомобили:</h2>
+
+                    <div class="car-container">
+
+                        {% for car in user_cars %}
+                        
+                            <div class="car">
+
+                                <i class="fas fa-car" style="font-size: 25px;"></i><br>
+
+                                <span>{{ car.name }}</span><br>
+
+                                <span>{{ car.year_of_issue }}</span><br>
+
+                                <button class="little-button" type="submit" name="car" value="{{ car.pk }}">Вернуть</button>
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                </form>
+
+            {% endif %}
+
+            <h2 style="text-align: left;">Список автомобилей:</h2>
+
+            
+
+                <form action="/rent_car/" method="POST">
+
+                    {% csrf_token %}
+
+                    <div class="car-container">
+
+                        {% for car in cars_list %}
+
+                            <div class="car">
+
+                                <i class="fas fa-car" style="font-size: 25px;"></i><br>
+
+                                <span>{{ car.name }}</span><br>
+
+                                <span>{{ car.year_of_issue }}</span><br>
+
+                                {% if not superuser %}
+
+                                    {% if not car.status %}
+
+                                        <button class="little-button" type="submit" name="car" value="{{ car.pk }}">Арендовать</button>
+                                    
+                                    {% else %}
+                                    
+                                        <span style="color: brown;">Занято</span>
+                                    
+                                    {% endif %}
+
+                                {% else %}
+
+                                    <span>
+
+                                        {% if not car.status %}
+
+                                            Свободна
+
+                                        {% else %}
+
+                                            Арендована
+
+                                        {% endif %}
+
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                </form>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

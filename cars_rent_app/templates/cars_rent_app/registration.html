@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Регистрация</title>
+    {%  include 'cars_rent_app/links.html' %}
+    {% load crispy_forms_tags %}
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="forms">
+
+            <h2>Регистрация</h2>
+
+            <form action="/registration/" method="post">
+
+                {% csrf_token %}
+
+                {{ form|crispy }}
+
+                <input class="my-button" type="submit" value="Регистрация">
+                
+            </form>
+
+        </div>
+    
+    </div>
+
+</body>
+</html>
